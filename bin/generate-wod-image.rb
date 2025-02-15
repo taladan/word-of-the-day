@@ -4,7 +4,6 @@
 require 'mini_magick'
 require 'word_wrap'
 require 'json'
-require 'string_to_ipa'
 
 def query_user 
   puts 'Please type or paste the word to use: ' 
