@@ -1,2 +1,4 @@
 *.xcf
+.gitignore
 posted/
+.comments/
