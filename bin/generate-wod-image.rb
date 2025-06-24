@@ -10,17 +10,55 @@ def query_user
   gets.chomp
 end
 
+def clean_up_json(data)
+  safe_json = data.gsub(/\"=>/, '":')
+
+  begin 
+    output = JSON.parse(safe_json)
+  rescue JSON::ParserError => e
+    puts "Error parsing JSON: #{e.message}"
+    puts "Problematic string (first 200 chars): #{safe_json_string[0..199]}..."
+    exit
+  end
+  output
+end
+
 user_word = ARGV[0] || query_user
 
 text = `curl https://api.dictionaryapi.dev/api/v2/entries/en/#{user_word}`
-json = JSON.parse(text)
+json = clean_up_json(text)
+
 word = json[0]['word']
 word_type = json[0]['meanings'][0]['partOfSpeech']
+
+# Split definitions out of JSON data
+definitions = []
+json.each do |entry|
+  # Iterate through 'meanings' array for the current entry if it exists
+  if entry['meanings']
+    entry['meanings'].each do |meaning|
+      part_of_speech = meaning['partOfSpeech']
+
+      # Check for definitions
+      if meaning['definitions']
+        meaning['definitions'].each do |definition_hash|
+          definition = definition_hash['definition']
+          # pack part and definition into array
+          if part_of_speech && definition
+            definitions << [part_of_speech, definition]
+          end
+        end
+      end
+    end
+  end
+end
+
 word_definition = WordWrap.ww(json[0]['meanings'][0]['definitions'][0]['definition'], width=50)
 filename = "#{word}.jpg"
 archive_path = './posted/'
 
-
+require 'pry-byebug'
+binding.pry
 background_image_path = './assets/old-brown-paper-texture-image.jpg'
 page_title = 'Word of the Day...'
 
