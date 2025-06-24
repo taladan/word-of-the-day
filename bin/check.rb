@@ -6,6 +6,8 @@ module Check
     args.each do |a|
       if posted_words.include?(a)
         puts "#{a} has already been posted"
+      else
+        system("generate-wod-image.rb #{a}")
       end
     end
   end

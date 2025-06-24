@@ -10,7 +10,7 @@ def query_user
   gets.chomp
 end
 
-user_word = ARGV[0]||query_user
+user_word = ARGV[0] || query_user
 
 text = `curl https://api.dictionaryapi.dev/api/v2/entries/en/#{user_word}`
 json = JSON.parse(text)
