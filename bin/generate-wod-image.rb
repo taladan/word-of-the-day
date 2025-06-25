@@ -16,6 +16,17 @@ class WordScraper
     ImageBuilder.new(@users_chosen.word, @users_chosen.usage, @users_chosen.definition)
   end
 
+  def word
+    @users_chosen.word
+  end
+
+  def usage
+    @users_chosen.usage
+  end
+
+  def definition
+    @users_chosen.definition
+  end
 
   private
   # grab json entry from api.dictionary.dev
