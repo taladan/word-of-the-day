@@ -8,7 +8,17 @@ module Check
   def self.check_posted_words(args, posted_words)
     args.each do |a|
       if posted_words.include?(a)
-        puts "#{a} has already been posted"
+        input = ''
+        until ['Y', 'y', 'n', 'N'].include?(input) 
+          system 'clear'
+          puts "#{a} has already been posted. Proceed (Y/N)?"
+          input = STDIN.gets.chomp
+        end
+        if ['Y','y'].include?(input) 
+          WordScraper.new(a)
+        else
+          exit
+        end
       else
         WordScraper.new(a)
       end
