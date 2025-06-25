@@ -11,7 +11,7 @@ class ImageBuilder
     @page_title = 'Word of the Day...'
     @image = MiniMagick::Image.open(get_background_image)
     seconds_since_midnight = Time.now.to_i % 86400 
-    @filename = "#{@word}_#{seconds_since_midnight}.jpg"
+    @filename = "#{@word}_#{seconds_since_midnight}.jpeg"
     draw_image
     output_image
     puts "#{@filename} written"
@@ -25,7 +25,7 @@ class ImageBuilder
   end
 
   def get_background_image
-    Dir.glob("#{@background_images}*.jpg").sample
+    Dir.glob("#{@background_images}*.jpeg").sample
   end
   # Draw each element with text formatting
   def draw_image
