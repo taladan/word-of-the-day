@@ -10,7 +10,7 @@ module Check
       if posted_words.include?(a)
         puts "#{a} has already been posted"
       else
-        WordGen.new(a)
+        WordScraper.new(a)
       end
     end
   end

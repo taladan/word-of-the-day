@@ -2,14 +2,14 @@
 # frozen_string_literal: true
 
 
-require_relative "../lib/chooser"
-require_relative "../lib/wod_image_builder"
+require_relative '../lib/chooser'
+require_relative '../lib/wod_image_builder'
 
 require 'mini_magick'
 require 'word_wrap'
 require 'json'
 
-class WordGen
+class WordScraper
   def initialize(define_word)
     @json = clean_up_json(retrieve_json(define_word))
     @users_chosen = Chooser.new(@json[0]['word'], get_definitions)
