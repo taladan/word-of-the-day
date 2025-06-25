@@ -7,10 +7,11 @@ class ImageBuilder
     @word = word
     @usage = usage
     @definition = definition
-    @background_image_path = './assets/old-brown-paper-texture-image.jpg'
+    @background_images = './assets/'
     @page_title = 'Word of the Day...'
-    @image = MiniMagick::Image.open(@background_image_path)
-    @filename = "#{@word}.jpg"
+    @image = MiniMagick::Image.open(get_background_image)
+    seconds_since_midnight = Time.now.to_i % 86400 
+    @filename = "#{@word}_#{seconds_since_midnight}.jpg"
     draw_image
     output_image
     puts "#{@filename} written"
@@ -23,6 +24,9 @@ class ImageBuilder
     WordWrap.ww(@definition, width=50)
   end
 
+  def get_background_image
+    Dir.glob("#{@background_images}*.jpg").sample
+  end
   # Draw each element with text formatting
   def draw_image
     @image.combine_options do |c| 
