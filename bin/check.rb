@@ -1,9 +1,10 @@
 #!/usr/bin/ruby
-require_relative "generate-wod-image"
+# /home/taladan/Documents/facebook/word/bin/check.rb
+require 'bundler/setup'
+require_relative "./generate-wod-image"
 
 module Check
-
-  # Match passed arguments against already posted words 
+# Match passed arguments against already posted words 
   def self.check_posted_words(args, posted_words)
     args.each do |a|
       if posted_words.include?(a)

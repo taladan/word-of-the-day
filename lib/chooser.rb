@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+require 'io/console'
 
 # This object manages the mechanics of navigating making
 # the choice of which daily events to keep and which to toss
 class Chooser
-  def initialize(word, items, generator_settings, maxitems=1)
+  def initialize(word, items, maxitems=1)
     @word = word
-    @settings = generator_settings
     @kept = []
     @limit = maxitems
     navigate_array(items)
@@ -21,13 +21,9 @@ class Chooser
         system 'clear'
         break if @kept.length == @limit
 
-        header
+        header(items[current_index])
 
-        if @kept.include?(items[current_index].sub(' ', ' - ')) 
-          puts 'This definition has been chosen already'
-        else 
-          puts "Current Definition:\n\n#{items[current_index]}"
-        end
+        puts "Current Definition:\n\n#{items[current_index][1]}"
 
         footer
 
@@ -48,7 +44,7 @@ class Chooser
         when "\e[A"
           current_index = (current_index + 1) % items.size
         when 'k'
-          @kept << items[current_index].sub(' ', ' - ') unless @kept.include?(items[current_index].sub(' ', ' - '))
+          @kept << items[current_index] unless @kept.include?(items[current_index])
         when 'q'
           puts 'Quitting'
           sleep(1)
@@ -74,9 +70,11 @@ class Chooser
   private
 
   # header text
-  def header
+  def header(items)
     puts "Word:\n"
     puts "\t#{@word}\n\n"
+    puts "Usage:\n"
+    puts "\t#{items[0]}"
     puts "\n\nPress 'K' to keep a definition."
     puts "\n\n"
   end

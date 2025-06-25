@@ -1,0 +1,31 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    benchmark (0.4.1)
+    byebug (12.0.0)
+    coderay (1.1.3)
+    json (2.12.2)
+    logger (1.7.0)
+    method_source (1.1.0)
+    mini_magick (5.2.0)
+      benchmark
+      logger
+    pry (0.15.2)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    pry-byebug (3.11.0)
+      byebug (~> 12.0)
+      pry (>= 0.13, < 0.16)
+    word_wrap (1.0.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  json
+  mini_magick
+  pry-byebug
+  word_wrap
+
+BUNDLED WITH
+   2.3.7
