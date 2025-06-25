@@ -12,6 +12,21 @@ class Chooser
     navigate_array(items)
   end
 
+  # return the chosen word
+  def word
+    return @word
+  end
+
+  # return the usage of the chosen definition
+  def usage
+    return @kept[0]
+  end
+
+  # return the chosen definition
+  def definition
+    return @kept[1]
+  end
+
   # allows for circular navigation of event items  
   # limits selection to 3 unique events from given array
   def navigate_array(items)
@@ -44,7 +59,11 @@ class Chooser
         when "\e[A"
           current_index = (current_index + 1) % items.size
         when 'k'
-          @kept << items[current_index] unless @kept.include?(items[current_index])
+          @kept = items[current_index] unless @kept.include?(items[current_index])
+          puts 'Finalizing choice'
+          sleep(1)
+          system 'clear'
+          break
         when 'q'
           puts 'Quitting'
           sleep(1)
@@ -64,7 +83,7 @@ class Chooser
   end
 
   def choices
-    @kept
+    return @kept
   end
 
   private

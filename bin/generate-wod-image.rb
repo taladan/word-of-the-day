@@ -10,15 +10,13 @@ require 'json'
 
 class WordGen
   def initialize(define_word)
-    @user_word = define_word
-    @json = clean_up_json(retrieve_json)
-    @word = @json[0]['word']
-    @definition = Chooser.new(@word, get_definitions)
+    @json = clean_up_json(retrieve_json(define_word))
+    @users_chosen = Chooser.new(@json[0]['word'], get_definitions)
   end
 
   # grab json entry from api.dictionary.dev
-  def retrieve_json
-    `curl https://api.dictionaryapi.dev/api/v2/entries/en/#{@user_word}`
+  def retrieve_json(word)
+    `curl https://api.dictionaryapi.dev/api/v2/entries/en/#{word}`
   end
 
   # clean up json data - api.dictionary.dev sends hash rocket formats for JSON for some reason
