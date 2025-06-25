@@ -3,6 +3,7 @@
 
 
 require_relative "../lib/chooser"
+require_relative "../lib/wod_image_builder"
 
 require 'mini_magick'
 require 'word_wrap'
@@ -12,8 +13,11 @@ class WordGen
   def initialize(define_word)
     @json = clean_up_json(retrieve_json(define_word))
     @users_chosen = Chooser.new(@json[0]['word'], get_definitions)
+    ImageBuilder.new(@users_chosen.word, @users_chosen.usage, @users_chosen.definition)
   end
 
+
+  private
   # grab json entry from api.dictionary.dev
   def retrieve_json(word)
     `curl https://api.dictionaryapi.dev/api/v2/entries/en/#{word}`
@@ -32,8 +36,8 @@ class WordGen
     end
     output
   end
-
-
+  
+  # parse definitions out of JSON data including the part of speech for each definition
   def get_definitions
     # Split definitions out of JSON data
     definitions = []
