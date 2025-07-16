@@ -28,7 +28,6 @@ class Chooser
   end
 
   # allows for circular navigation of event items  
-  # limits selection to 3 unique events from given array
   def navigate_array(items)
     current_index = 0
     begin
