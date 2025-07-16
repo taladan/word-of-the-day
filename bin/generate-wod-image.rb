@@ -47,7 +47,7 @@ class WordScraper
     end
     output
   end
-  
+
   # parse definitions out of JSON data including the part of speech for each definition
   def get_definitions
     # Split definitions out of JSON data

@@ -17,7 +17,7 @@ module Check
         if ['Y','y'].include?(input) 
           WordScraper.new(a)
         else
-          exit
+          break
         end
       else
         WordScraper.new(a)
