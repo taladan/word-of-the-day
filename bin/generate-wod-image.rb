@@ -13,7 +13,8 @@ class WordScraper
   def initialize(define_word)
     @json = clean_up_json(retrieve_json(define_word))
     @users_chosen = Chooser.new(@json[0]['word'], get_definitions)
-    ImageBuilder.new(@users_chosen.word, @users_chosen.usage, @users_chosen.definition)
+    # ImageBuilder.new(@users_chosen.word, @users_chosen.usage, @users_chosen.definition, @users_chosen.example)
+    ImageBuilder.new(word, usage, definition, example)
   end
 
   def word
@@ -26,6 +27,10 @@ class WordScraper
 
   def definition
     @users_chosen.definition
+  end
+
+  def example
+    @users_chosen.example
   end
 
   private
@@ -62,9 +67,12 @@ class WordScraper
           if meaning['definitions']
             meaning['definitions'].each do |definition_hash|
               definition = definition_hash['definition']
+              example = definition_hash['example']
               # pack part and definition into array
-              if part_of_speech && definition
-                definitions << [part_of_speech, definition]
+              if part_of_speech && definition && example
+                definitions << [part_of_speech, definition, example]
+              elsif part_of_speech && definition
+                definitions << [part_of_speech, definition, nil]
               end
             end
           end
