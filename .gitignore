@@ -1,4 +1,5 @@
 *.xcf
+*.jpeg
 .gitignore
 .comments/
 posted
