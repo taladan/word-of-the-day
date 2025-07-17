@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'io/console'
+require 'colorize'
 
 # This object manages the mechanics of navigating making
 # the choice of which daily events to keep and which to toss
@@ -27,6 +28,11 @@ class Chooser
     return @kept[1]
   end
 
+  # return the example
+  def example
+    return @kept[2]
+  end
+
   # allows for circular navigation of event items  
   def navigate_array(items)
     current_index = 0
@@ -37,7 +43,11 @@ class Chooser
 
         header(items[current_index])
 
-        puts "Current Definition:\n\n#{items[current_index][1]}"
+        puts "\n\nCurrent Definition:".bold
+        puts "\n\n\t#{items[current_index][1]}"
+
+        puts "\n\nExample:".bold
+        puts "\n\n\t#{items[current_index][2]}"
 
         footer
 
@@ -89,17 +99,20 @@ class Chooser
 
   # header text
   def header(items)
-    puts "Word:\n"
-    puts "\t#{@word}\n\n"
-    puts "Usage:\n"
-    puts "\t#{items[0]}"
-    puts "\n\nPress 'K' to keep a definition."
-    puts "\n\n"
+    puts "Word:".bold
+    puts "\n\t#{@word}\n\n"
+    puts "Usage:".bold
+    puts "\n\t#{items[0]}"
   end
 
   def footer
+    keep_key = "K".bold
+    quit_key = "Q".bold
+    puts "\n\n\n\n"
+    puts "\t\tUse left/right arrows to navigate (#{quit_key} to quit)"
     puts "\n\n"
-    puts 'Use left/right arrows to navigate (q to quit)'
+    puts "\t\tPress #{keep_key} to keep a definition."
+    puts "\n\n"
   end
 
 end
