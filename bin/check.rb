@@ -34,5 +34,5 @@ if __FILE__ == $0
   # the shell script as of current writing is:
   # basename -a /home/taladan/Documents/facebook/word/posted/*.jpg | sed 's/\.jpg$//'
 
-  Check.check_posted_words(ARGV, `list_posted_words.sh`.split)
+  Check.check_posted_words(ARGV, `/home/taladan/Documents/facebook/word/bin/list_posted_words.sh`.split)
 end
