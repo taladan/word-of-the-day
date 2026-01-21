@@ -24,7 +24,7 @@ class DataHandle
     # Store entry as array: [usage, definition, example]
     data[word][index.to_s] = {
       usage: packet[:usage],
-      defintion: packet[:definition],
+      definition: packet[:definition],
       example: packet[:example]
     }
 
