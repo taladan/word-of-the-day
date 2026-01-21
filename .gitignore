@@ -2,5 +2,6 @@
 *.jpeg
 .gitignore
 .comments/
+data/
 posted
 Gemfile.lock
