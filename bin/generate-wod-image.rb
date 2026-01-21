@@ -23,6 +23,13 @@ class WordScraper
     end
 
     @users_chosen = Chooser.new(define_word, get_definitions)
+
+    # Controls opening, writing, and saving of word data to JSON database
+    @datahandler = DataHandle.new
+
+    save_word(word, usage, definition, example)
+
+    # Build our image
     ImageBuilder.new(word, usage, definition, example)
   end
 
@@ -44,7 +51,12 @@ class WordScraper
 
   # Save chosen word to disk
   def save_word(word, usage, definition, example)
-    packet = {word: "#{word}", usage: "#{usage}", definition: "#{definition}", example: "#{example}"} 
+    packet = {
+      word: word, 
+      usage: usage, 
+      definition: definition, 
+      example: example
+  }
     @datahandler.write(packet)
   end
 
