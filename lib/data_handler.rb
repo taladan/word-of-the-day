@@ -18,6 +18,16 @@ class DataHandle
     # initialize word entry if non existant
     data[word] ||= {}
 
+    # Check for dupes
+    data[word].each do |_id, entry|
+      if entry['usage'] == packet[:usage] &&
+         entry['definition'] == packet[:definition] &&
+         entry['example'] == packet[:example]
+        puts "Entry already exists. Skipping save."
+        return
+      end
+    end
+
     # Unique index for this word
     index = (data[word].keys.map(&:to_i).max || 0) + 1
 
