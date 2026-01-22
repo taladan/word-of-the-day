@@ -108,11 +108,11 @@ class Chooser
   def header(items, color)
     puts "Word:".colorize(color).bold
     puts "\n\t#{@word}\n\n".colorize(color)
-    puts "Usage:".bold.colorize(color).bold
+    puts "Usage:".colorize(color).bold
     puts "\n\t#{items[0]}".colorize(color)
   end
 
-  def footer
+  def footer(color)
     keep_key = "K".bold
     quit_key = "Q".bold
     puts "\n\n\n\n".colorize(color)
