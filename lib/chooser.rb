@@ -10,6 +10,7 @@ class Chooser
     @word = word
     @kept = []
     @limit = maxitems
+    @data_handler = DataHandle.new
     navigate_array(items)
   end
 
@@ -41,15 +42,21 @@ class Chooser
         system 'clear'
         break if @kept.length == @limit
 
-        header(items[current_index])
+        # Determin if this def is in JSON
+        is_used = @data_handler.definition_used?(@word, items[current_index][0], items[current_index][1])
 
-        puts "\n\nCurrent Definition:".bold
-        puts "\n\n\t#{items[current_index][1]}"
+        # set color based on usage status
+        display_color = is_used ? :light_red : :white
 
-        puts "\n\nExample:".bold
-        puts "\n\n\t#{items[current_index][2]}"
+        header(items[current_index], display_color)
 
-        footer
+        puts "\n\nCurrent Definition:".colorize(display_color).bold
+        puts "\n\n\t#{items[current_index][1]}".colorize(display_color)
+
+        puts "\n\nExample:".colorize(display_color).bold
+        puts "\n\n\t#{items[current_index][2]}".colorize(display_color)
+
+        footer(display_color)
 
         char = STDIN.getch
 
@@ -98,20 +105,20 @@ class Chooser
   private
 
   # header text
-  def header(items)
-    puts "Word:".bold
-    puts "\n\t#{@word}\n\n"
-    puts "Usage:".bold
-    puts "\n\t#{items[0]}"
+  def header(items, color)
+    puts "Word:".colorize(color).bold
+    puts "\n\t#{@word}\n\n".colorize(color)
+    puts "Usage:".bold.colorize(color).bold
+    puts "\n\t#{items[0]}".colorize(color)
   end
 
   def footer
     keep_key = "K".bold
     quit_key = "Q".bold
-    puts "\n\n\n\n"
-    puts "\t\tUse left/right arrows to navigate (#{quit_key} to quit)"
-    puts "\n\n"
-    puts "\t\tPress #{keep_key} to keep a definition."
+    puts "\n\n\n\n".colorize(color)
+    puts "\t\tUse left/right arrows to navigate (#{quit_key} to quit)".colorize(color)
+    puts "\n\n".colorize(color)
+    puts "\t\tPress #{keep_key} to keep a definition.".colorize(color)
     puts "\n\n"
   end
 

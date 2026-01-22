@@ -5,23 +5,9 @@ require_relative "./generate-wod-image"
 
 module Check
   # Match passed arguments against already posted words 
-  def self.check_posted_words(args, posted_words)
+  def self.check_posted_words(args)
     args.each do |a|
-      if posted_words.include?(a)
-        input = ''
-        until ['Y', 'y', 'n', 'N'].include?(input) 
-          system 'clear'
-          puts "#{a} has already been posted. Proceed (Y/N)?"
-          input = STDIN.gets.chomp
-        end
-        if ['Y','y'].include?(input) 
-          WordScraper.new(a)
-        else
-          break
-        end
-      else
-        WordScraper.new(a)
-      end
+      WordScraper.new(a)
     end
   end
 end
@@ -34,5 +20,5 @@ if __FILE__ == $0
   # the shell script as of current writing is:
   # basename -a /home/taladan/Documents/facebook/word/posted/*.jpg | sed 's/\.jpg$//'
 
-  Check.check_posted_words(ARGV, `/home/taladan/Documents/facebook/word/bin/list_posted_words.sh`.split)
+  Check.check_posted_words(ARGV)
 end

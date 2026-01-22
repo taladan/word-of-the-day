@@ -24,6 +24,11 @@ class WordScraper
 
     @users_chosen = Chooser.new(define_word, get_definitions)
 
+    if @users_chosen.definition.nil?
+      puts "No definition selected. Exiting."
+      exit
+    end
+
     # Controls opening, writing, and saving of word data to JSON database
     @datahandler = DataHandle.new
 

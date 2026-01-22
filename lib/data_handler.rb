@@ -31,6 +31,19 @@ class DataHandle
     save_to_disk(data)
   end
 
+  def definition_used?(word, usage, definition)
+    data = read_data_file
+    return false unless data[word]
+
+    # Iterate entries
+    data[word].each do |_index, entry|
+      if entry['usage'] == usage && entry['definition'] == definition
+        return true
+      end
+    end
+    false
+  end
+
   private
 
   def ensure_data_file_exists
