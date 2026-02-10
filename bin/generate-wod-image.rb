@@ -1,10 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'pathname'
 
-require_relative '../lib/chooser'
-require_relative '../lib/wod_image_builder'
-require_relative '../lib/data_handler'
+PROJECT_ROOT = File.expand_path('..', __dir__) 
+DATA_PATH    = File.join(PROJECT_ROOT, 'data')
+ASSETS_PATH  = File.join(PROJECT_ROOT, 'assets')
+QUEUE_PATH   = File.join(PROJECT_ROOT, 'post_queue') 
+[DATA_PATH, ASSETS_PATH].each { |d| Dir.mkdir(d) unless Dir.exist?(d) }
+
+require_relative File.join(PROJECT_ROOT, 'lib', 'chooser')
+require_relative File.join(PROJECT_ROOT, 'lib', 'wod_image_builder')
+require_relative File.join(PROJECT_ROOT, 'lib', 'data_handler')
 
 require 'mini_magick'
 require 'word_wrap'
@@ -112,14 +119,24 @@ class WordScraper
                 end
               end
 
+
+              # Clean tags
+              clean_mw_text = ->(text) {
+                return nil if text.nil?
+                text.gsub(/\{(?:a_link|d_link|sx)\|([^}|]+)(?:\|[^}]*)?\}/, '\1')
+                    .gsub(/\{.*?\}/, "") # Remove remaining non-content tags like {bc}
+                    .strip
+              }
+
               # Cleanup markup from Merriam Webster
-              clean_def = definition_text.gsub(/\{.*?\}/, "").strip
+              clean_def = clean_mw_text.call(definition_text)
               # Remove leading colon/space
               clean_def = clean_def.gsub(/^:\s*/, "")
 
+              clean_ex = clean_mw_text.call(example_text)
+
               # only add to list if definition is not empty
               if clean_def.match?(/[a-zA-Z0-9]/)
-                clean_ex = example_text&.gsub(/\{.*?\}/, "")&.strip
                 definitions << [part_of_speech, clean_def, clean_ex]
               end
             end

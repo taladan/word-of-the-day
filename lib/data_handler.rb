@@ -6,7 +6,8 @@ require 'json'
 # Handles data retrieval and storage of JSON data file
 class DataHandle
   def initialize
-    @file_path = File.join(Dir.pwd, 'data', 'posted_words.json')
+    # @file_path = File.join(Dir.pwd, 'data', 'posted_words.json')
+    @file_path = File.join(DATA_PATH, 'posted_words.json')
     ensure_data_file_exists
   end
   

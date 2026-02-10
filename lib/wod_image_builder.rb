@@ -14,7 +14,8 @@ class ImageBuilder
     @usage = usage
     @definition = definition
     @example = example
-    @background_images = './assets'
+    # @background_images = './assets'
+    @background_images = ASSETS_PATH
     @page_title = 'Word of the Day...'
 
     # Open image and capture width for calculations
@@ -168,8 +169,9 @@ class ImageBuilder
     end
   end
 
+  # Write to post queue
   def output_image
-    @image.write @filename
+    @image.write File.join(QUEUE_PATH, @filename)
   end
 end
 
