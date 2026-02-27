@@ -101,7 +101,7 @@ class WordScraper
     alt_text = generate_alt_text
     image_path = File.join(QUEUE_PATH, @image_filename)
 
-    print "What date/time should this post?"
+    print "What date/time should this post? "
     post_date = STDIN.gets.chomp.downcase
 
     puts "\nPreparing to schedule..."
@@ -109,11 +109,16 @@ class WordScraper
 
     safe_alt_text = Shellwords.escape(alt_text)
     safe_image_path = Shellwords.escape(image_path)
+    safe_date = Shellwords.escape(post_date)
 
-    command = "ruby #{SCHEDULER} -i #{safe_image_path} -a #{safe_alt_text} -t #{post_date}"
+    command = "#{SCHEDULER} -i #{safe_image_path} -a #{safe_alt_text} -c Word -t #{safe_date}"
 
     puts "Handoff to scheduler script..."
-    if system(command)
+    success = Bundler.with_unbundled_env do
+      system(command)
+    end
+
+    if success
       puts "\n--- Scheduling Handoff Complete ---"
     else
       puts "\n---  Error during scheduling handoff ---"
