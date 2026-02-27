@@ -2,12 +2,14 @@
 # frozen_string_literal: true
 
 require 'pathname'
+require 'shellwords'
 
 PROJECT_ROOT = File.expand_path('..', __dir__) 
 DATA_PATH    = File.join(PROJECT_ROOT, 'data')
 ASSETS_PATH  = File.join(PROJECT_ROOT, 'assets')
 QUEUE_PATH   = File.join(PROJECT_ROOT, 'post_queue') 
 [DATA_PATH, ASSETS_PATH].each { |d| Dir.mkdir(d) unless Dir.exist?(d) }
+SCHEDULER = "ssched"
 
 require_relative File.join(PROJECT_ROOT, 'lib', 'chooser')
 require_relative File.join(PROJECT_ROOT, 'lib', 'wod_image_builder')
@@ -42,7 +44,10 @@ class WordScraper
     save_word(word, usage, definition, example)
 
     # Build our image
-    ImageBuilder.new(word, usage, definition, example)
+    builder = ImageBuilder.new(word, usage, definition, example)
+    @image_filename = builder.filename
+
+    offer_to_schedule
   end
 
   def word
@@ -73,6 +78,49 @@ class WordScraper
   end
 
   private
+  def offer_to_schedule
+    puts "\n" + "-" * 40
+    puts "Image generated successfully: #{@image_filename}"
+    print "Would you like to schedule this post now? [Y/n]: "
+    answer = STDIN.gets.chomp.downcase
+  
+    if answer == 'y' || answer == ''
+      schedule_post
+    else
+      puts "Done. Image saved but not scheduled."
+    end
+  end
+
+  def generate_alt_text
+    text = "Word of the Day: #{word} (#{usage}). Definition: #{definition}."
+    text += " Example: #{example}" if example && !example.empty?
+    text
+  end
+
+  def schedule_post
+    alt_text = generate_alt_text
+    image_path = File.join(QUEUE_PATH, @image_filename)
+
+    print "What date/time should this post?"
+    post_date = STDIN.gets.chomp.downcase
+
+    puts "\nPreparing to schedule..."
+    puts "Alt Text generated: \"#{alt_text}\""
+
+    safe_alt_text = Shellwords.escape(alt_text)
+    safe_image_path = Shellwords.escape(image_path)
+
+    command = "ruby #{SCHEDULER} -i #{safe_image_path} -a #{safe_alt_text} -t #{post_date}"
+
+    puts "Handoff to scheduler script..."
+    if system(command)
+      puts "\n--- Scheduling Handoff Complete ---"
+    else
+      puts "\n---  Error during scheduling handoff ---"
+      puts "\n---  Manual scheduling necessary     ---"
+    end
+  end
+
   def retrieve_mw_json(word)
     url = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/#{word}?key=#{API_KEY}"
     uri = URI.parse(url)

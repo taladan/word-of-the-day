@@ -4,6 +4,8 @@
 require 'mini_magick'
 require 'word_wrap'
 class ImageBuilder
+  attr_reader :filename
+
   # Standard margin/font constants
   MARGIN_X = 150
   FONT_SIZE_DEFINITION=96
