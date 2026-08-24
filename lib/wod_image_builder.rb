@@ -25,7 +25,7 @@ class ImageBuilder
     @image_width = @image.width
 
     seconds_since_midnight = Time.now.to_i % 86400
-    @filename = "#{@word}_#{seconds_since_midnight}.jpeg"
+    @filename = "#{@word}.jpeg"
 
     draw_image
     output_image
@@ -69,6 +69,9 @@ class ImageBuilder
     current_y = 200 # Vert start position
 
     @image.combine_options do |c|
+      # toss metadata
+      c.strip 
+
       # -- Page Title --
       font_title = '/usr/share/fonts/opentype/urw-base35/URWBookman-DemiItalic.otf'
       pointsize_title = 181
@@ -76,7 +79,7 @@ class ImageBuilder
 
       # title shadow
       c.font font_title
-      c.style 'Bold'
+      c.weight 'Bold'
       c.style 'Italic'
       c.fill '#030303'
       c.pointsize pointsize_title
@@ -102,14 +105,14 @@ class ImageBuilder
 
       # Word dropshadow
       c.font font_word
-      c.style 'Bold'
+      c.weight 'Bold'
       c.fill '#05050580'
       c.pointsize current_word_font_size
       c.draw "text #{MARGIN_X + 5},#{current_y + 5} '#{word_text}'"
 
       # Word
       c.font font_word
-      c.style 'Bold'
+      c.weight 'Bold'
       c.fill 'black'
       c.pointsize current_word_font_size
       c.draw "text #{MARGIN_X},#{current_y} '#{word_text}'"
@@ -152,7 +155,7 @@ class ImageBuilder
         example_title_text = 'Example:'
 
         c.font font_example_title
-        c.style 'Bold'
+        c.weight 'Bold'
         c.style 'Italic'
         c.fill 'black'
         c.pointsize pointsize_example_title

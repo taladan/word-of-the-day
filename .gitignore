@@ -2,6 +2,9 @@
 *.jpeg
 .gitignore
 .comments/
+archive/
+assets/
 data/
-posted
+post_queue/
+vendor/
 Gemfile.lock
